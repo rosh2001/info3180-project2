@@ -31,4 +31,4 @@ class CarDetails(FlaskForm):
     carType=SelectField('Car Type' ,choices=[('SUV','SUV'),('Sports Car','Sports Car'),('Sedan','Sedan'),('Coupe','Coupe')])
     transmission=SelectField('Transmission' ,choices=[('Automatic','Automatic'),('Manual','Manual')])
     description= TextAreaField('Description', validators=[DataRequired()])
-    carPhoto=FileField('Upload Photo',validators=[FileRequired(),FileAllowed(["jpg","png","Images only!")])
+    carPhoto=FileField('Upload Photo',validators=[FileRequired(),FileAllowed(["jpg","png","Images only!"])])
