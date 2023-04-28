@@ -14,8 +14,8 @@ class Users(db.Model):
     biography = db.Column(db.String(255))
     pic = db.Column(db.String(255))
     date_joined = db.Column(db.DateTime)
-    cars = db.relationship("Cars", back_populates='users')
-    favourites = db.relationship("Favourites")
+    follow = db.relationship("follow", back_populates='users')
+    like = db.relationship("like")
 
     def __init__(self, username, password, name, email, location, biography, pic, date_joined):
         self.username = username
@@ -46,34 +46,19 @@ class Users(db.Model):
         return '<User %r>' % (self.username)
 
 
-class Cars(db.Model):
-    __tablename__ = 'cars'
+class follows(db.Model):
+    __tablename__ = 'follows'
 
     id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(255))
-    make = db.Column(db.String(80))
-    model = db.Column(db.String(80))
-    colour = db.Column(db.String(80))
-    year = db.Column(db.String(4))
-    transmission = db.Column(db.String(80))
-    car_type = db.Column(db.String(80))
-    price = db.Column(db.Float)
-    photo = db.Column(db.String(255))
+    follower_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    users = db.relationship("Users", back_populates="cars")
-    favourites = db.relationship("Favourites")
+    users = db.relationship("Users", back_populates="follows")
+    follow = db.relationship("follow")
 
 
-    def __init__(self, description, make, model, colour, year, transmission, car_type, price, photo, user_id):    
-        self.description = description
-        self.make = make
-        self.model = model
-        self.colour = colour
-        self.year = year
-        self.transmission = transmission
-        self.car_type = car_type
-        self.price = price
-        self.photo = photo 
+    def __init__(self, follower_id,user_id):    
+        self.follower_id = follower_id 
         self.user_id = user_id
 
     def get_id(self):
@@ -82,18 +67,18 @@ class Cars(db.Model):
         except NameError:
             return str(self.id)  # python 3 support
 
-class Favourites(db.Model):
-    __tablename__ = 'favourites'
+class likes(db.Model):
+    __tablename__ = 'likes'
 
     id = db.Column(db.Integer, primary_key=True)
-    car_id = db.Column(db.Integer, db.ForeignKey('cars.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    cars = db.relationship("Cars")
-    users = db.relationship("Users")
+    follows = db.relationship("follow")
+    likes = db.relationship("likes")
 
 
-    def __init__(self, car_id, user_id):
-        self.car_id = car_id
+    def __init__(self, post_id, user_id):
+        self.post_id = post_id
         self.user_id = user_id
 
     def get_id(self):
